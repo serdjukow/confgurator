@@ -93,20 +93,18 @@ partbutton.addEventListener('click', e => {
 })
 
 function getOffset (per) {
-	let radius = 38
+	let radius = 28
 	let offset = radius * 2 * Math.PI - (per / 100) * radius * 2 * Math.PI
 	return offset
 }
 
-
 function progressItemToHtml(name, per) {
 	const carPanelItemsContainer = document.querySelector('.car-panel__items')
-	let radius = 38
+	let radius = 28
 	let circumference = radius * 2 * Math.PI
-	carPanelItemsContainer.innerHTML = ''
 
 	carPanelItemsContainer.insertAdjacentHTML(
-		'beforebegin',
+		'beforeEnd',
 		`
 		<li class="car-panel__item" data-panel="${name}">
 			<div class="car-panel__name">
@@ -115,26 +113,26 @@ function progressItemToHtml(name, per) {
 			<div class="car-panel__progress progress">
 				<div class="progress__item">
 				<svg				
-					width="100"
-					height="100">
+					width="80"
+					height="80">
 					<circle				 
 						stroke="#9e9e9e"
-						stroke-width="6"
+						stroke-width="5"
 						fill="transparent"
 						r="${radius}"
-						cx="50"
-						cy="50"/>
+						cx="40"
+						cy="40"/>
 					<circle
 						class="progress-ring"
 						stroke-dasharray="${circumference} ${circumference}"
 						style="stroke-dashoffset:${getOffset(per)}"
 						stroke="#5fdd5a"
-						stroke-width="6"
+						stroke-width="5"
 						fill="transparent"
 						progress="0"
 						r="${radius}"
-						cx="50"
-						cy="50"/>
+						cx="40"
+						cy="40"/>
 					</svg>
 					<style>
 					.progress-ring {
@@ -143,12 +141,43 @@ function progressItemToHtml(name, per) {
 						transform-origin: 50% 50%;	
 					}
 					</style>
-					<div class="progress__percent"><span class="percent">${per}</span>%</div>
+					<div style="display: none;" class="progress__percent"><span class="percent">${per}</span>%</div>
+
+					<div class="percent-block">
+						
+					</div>
 				</div>
 			</div>
 		</li>
 		`
 	)
+}
+
+function totalValue() {
+	const totalValueProgress = document.querySelector('.total-value__progress')
+	const currentTotalValue = document.querySelector('.total-value__curretnt-value')
+
+	const localDate = JSON.parse(localStorage.getItem('carConfig'))
+	let totalValue = localDate.map(item => item.percent).reduce((prev, curr) => prev + curr, 0)
+	totalValueProgress.style.width = `${totalValue / localDate.length}%`
+	currentTotalValue.textContent = `${totalValue / localDate.length}%`
+}
+totalValue()
+
+function createPercentItem(value) {
+	const percentItem = document.createElement('div')
+	percentItem.classList.add('percent-block__item')
+	for(i = 0; i < value + 1; i++) {
+		percentItem.innerHTML += `<span>${i}%</span>`
+	}
+	return percentItem
+}
+
+const percentItems = document.querySelectorAll('.percent-block')
+if(percentItems) {	
+	percentItems.forEach( item=> {
+		item.insertAdjacentElement('beforeEnd', createPercentItem(100))
+	})
 }
 
 function updateData() {
@@ -158,7 +187,16 @@ function updateData() {
 		let element = currentData.filter(el => el.part === item.dataset.panel)
 		item.querySelector('.progress-ring').style.strokeDashoffset = getOffset(element[0].percent)
 		item.querySelector('.percent').textContent = element[0].percent
+		item.querySelector('.percent-block__item').style.top = `-${percentToTop(element[0].percent)}px`		
 	})
+	totalValue()
+}
+
+const percentToTop = (value) => {
+	const percentBlockItem = document.querySelector('.percent-block__item')
+	let percentElementHight = percentBlockItem.scrollHeight / 101
+	let percentЕrek = percentElementHight * value
+	return percentЕrek
 }
 
 const resetBtn = document.getElementById('reset')
@@ -198,6 +236,31 @@ const partsHover = activeElem => {
 	})
 }
 
+const hoverPanel = () => {
+	parts.forEach(link => {
+		link.addEventListener('mouseover', function(e) {
+			if(e.target.parentNode.closest('.part')) {
+				let linkValue = e.target.parentNode.dataset.parts.toLowerCase()
+				panelHover(linkValue)
+			}			
+		})
+		link.addEventListener('mouseout', e => {
+			let linkValue = e.target.parentNode.dataset.parts.toLowerCase()
+			panelHover(linkValue)
+		})
+	})
+}
+hoverPanel()
+
+const panelHover = activeElem => {
+	const panelLinks = document.querySelectorAll('.car-panel__item')
+	panelLinks.forEach(elem => {
+		if (elem.dataset.panel === activeElem) {
+			elem.classList.toggle('hover')
+		}
+	})
+}
+
 const currentDate = new Date().getFullYear()
 const dateContainer = document.getElementById('date')
 dateContainer.innerText = currentDate
@@ -220,3 +283,49 @@ function changePanelValue() {
 		}
 	})
 }
+
+
+const input = document.querySelector('.part-info__input');
+const buttonUp = document.querySelector('.up');
+const buttonDown = document.querySelector('.down');
+
+buttonUp.onclick = function() {
+    let value = parseInt(input.value, 10);
+    value = isNaN(value) ? 0 : value;
+	value++;
+	if (value < 101 && value > -1) {
+		
+		input.value = value;
+		const localDate = JSON.parse(localStorage.getItem('carConfig'))
+		const newDate = []
+		localDate.forEach(item => {
+			newDate.push(item)
+			if (item.part === input.dataset.input) {
+				item.percent = +input.value
+			}
+		})
+		localStorage.setItem('carConfig', JSON.stringify(newDate))
+		updateData()
+		checkPercentValue(input.dataset.input)
+	}
+};
+
+buttonDown.onclick = function() {
+    let value = parseInt(input.value, 10);
+    value = isNaN(value) ? 0 : value;
+	value--;
+	if (value < 101 && value > -1) {
+		input.value = value;
+		const localDate = JSON.parse(localStorage.getItem('carConfig'))
+		const newDate = []
+		localDate.forEach(item => {
+			newDate.push(item)
+			if (item.part === input.dataset.input) {
+				item.percent = +input.value
+			}
+		})
+		localStorage.setItem('carConfig', JSON.stringify(newDate))
+		updateData()
+		checkPercentValue(input.dataset.input)
+	}
+};

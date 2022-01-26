@@ -530,7 +530,13 @@ l98 46 30 -45 c17 -24 39 -44 49 -44 47 0 130 249 114 344 -6 41 -23 49 -23
 							<span></span>
 						</button>
 						<div class="part-info__value">
-							<input class="part-info__input" value="0" type="number" step="25" min="0" max="100" placeholder="progress" data-input="" />
+							<div class="container">
+								<input type="number" class="part-info__input input" value="0" min="0" max="100" />
+								<div class="spinner">
+									<button type="button" class="up button">&rsaquo;</button>
+									<button type="button" class="down button">&lsaquo;</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -539,6 +545,19 @@ l98 46 30 -45 c17 -24 39 -44 49 -44 47 0 130 249 114 344 -6 41 -23 49 -23
 					<div class="car-panel__row car-panel__container">
 						<fieldset>
 							<legend class="car-panel__title" align="left">Preview</legend>
+							<div class="car-panel__total-value total-value">
+								<div class="total-value__title">
+									Total value
+								</div>
+								<div class="total-value__block">
+									<div class="total-value__min">0%</div>
+									<div class="total-value__max">100%</div>
+									<div class="total-value__trek">
+										<span class="total-value__curretnt-value">20%</span>
+										<span class="total-value__progress"></span>
+									</div>
+								</div>
+							</div>
 							<ul class="car-panel__items"></ul>
 						</fieldset>
 					</div>
