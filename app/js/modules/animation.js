@@ -1,3 +1,5 @@
+import {getOffset, percentToTop, updateData, checkPercentValue} from './functions.js'
+
 const pageAnimation = () => {
 	function carPanelAnimation() {
 		const carPanelItems = document.querySelectorAll('.car-panel__item')
@@ -51,4 +53,4 @@ const pageAnimation = () => {
 	totalValueAnimation()
 }
 
-document.addEventListener('DOMContentLoaded', pageAnimation)
+export default pageAnimation

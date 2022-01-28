@@ -1,6 +1,18 @@
+import showInfoMessage from './modules/info-message.js'
+import saveConfig from './modules/save-config.js'
+import pageAnimation from './modules/animation.js'
+
+import {getOffset, updateData, checkPercentValue} from './modules/functions.js'
+
+
+
+pageAnimation()
+saveConfig()
+
 const carBody = document.querySelector('.car')
 const parts = document.querySelectorAll('.part')
 const hint = document.querySelector('.hint')
+
 
 const data = [
 	{ part: 'door', percent: 0 },
@@ -9,9 +21,9 @@ const data = [
 	{ part: 'roof', percent: 0 },
 	{ part: 'hood', percent: 0 },
 ]
-
+const currentData = JSON.parse(localStorage.getItem('carConfig'))
 if (localStorage.getItem('carConfig')) {
-	const currentData = JSON.parse(localStorage.getItem('carConfig'))
+	
 	currentData.forEach(el => {
 		progressItemToHtml(el.part, el.percent)
 		checkPercentValue(el.part)
@@ -23,6 +35,29 @@ if (localStorage.getItem('carConfig')) {
 	})
 	localStorage.setItem('carConfig', JSON.stringify(data))
 }
+//======================================================================================
+const carPanelItems = document.querySelector('.car-panel__items')
+carPanelItems.addEventListener('click', e => {
+	if (e.target.closest('.car-panel__item')) {
+		const datasetValue = e.target.dataset.panel
+		updateHint(datasetValue)
+		changePanelValue()
+		hint.classList.add('visible')
+
+		if (e.pageX + hint.offsetWidth < document.body.offsetWidth) {
+			hint.style.top = e.pageY - 70 + 'px'
+			hint.style.left = e.pageX + 15 + 'px'
+		} else {
+			hint.style.top = e.pageY - 70 + 'px'
+			hint.style.left = e.pageX - hint.offsetWidth - 10 + 'px'
+		}
+	} else if (!e.target.closest('.carPanelItems')) {
+		hint.classList.remove('visible')
+	}
+})
+
+
+//======================================================================================
 
 carBody.addEventListener('click', e => {
 	if (e.target.parentNode.closest('.part')) {
@@ -32,7 +67,7 @@ carBody.addEventListener('click', e => {
 		hint.classList.add('visible')
 
 		if (e.pageX + hint.offsetWidth < document.body.offsetWidth) {
-			hint.style.top = e.pageY + 10 + 'px'
+			hint.style.top = e.pageY - 70 + 'px'
 			hint.style.left = e.pageX + 15 + 'px'
 		} else {
 			hint.style.top = e.pageY + 10 + 'px'
@@ -43,33 +78,6 @@ carBody.addEventListener('click', e => {
 	}
 })
 
-function checkPercentValue(datasetValue) {
-	const localDate = JSON.parse(localStorage.getItem('carConfig'))
-	if (localDate) {
-		let inputValue = localDate.filter(item => item.part === datasetValue)
-		if (inputValue[0].percent > 0) {
-			addPartActive(inputValue[0].part)
-		} else if (inputValue[0].percent == 0) {
-			removePartActive(inputValue[0].part)
-		}
-	}
-}
-
-function addPartActive (part) {
-	parts.forEach(item => {
-		if (item.dataset.parts === part) {
-			item.classList.add('active')
-		}
-	})
-}
-
-function removePartActive (part) {
-	parts.forEach(item => {
-		if (item.dataset.parts === part) {
-			item.classList.remove('active')
-		}
-	})
-}
 
 const updateHint = datasetValue => {
 	const partTitle = document.querySelector('.part-info__title')
@@ -86,17 +94,13 @@ function getInputValue(datasetValue) {
 	return inputValue[0].percent
 }
 
+
 const partbutton = document.querySelector('.part-info__button')
 partbutton.addEventListener('click', e => {
 	e.preventDefault()
 	hint.classList.remove('visible')
 })
 
-function getOffset (per) {
-	let radius = 28
-	let offset = radius * 2 * Math.PI - (per / 100) * radius * 2 * Math.PI
-	return offset
-}
 
 function progressItemToHtml(name, per) {
 	const carPanelItemsContainer = document.querySelector('.car-panel__items')
@@ -153,21 +157,12 @@ function progressItemToHtml(name, per) {
 	)
 }
 
-function totalValue() {
-	const totalValueProgress = document.querySelector('.total-value__progress')
-	const currentTotalValue = document.querySelector('.total-value__curretnt-value')
 
-	const localDate = JSON.parse(localStorage.getItem('carConfig'))
-	let totalValue = localDate.map(item => item.percent).reduce((prev, curr) => prev + curr, 0)
-	totalValueProgress.style.width = `${totalValue / localDate.length}%`
-	currentTotalValue.textContent = `${totalValue / localDate.length}%`
-}
-totalValue()
 
 function createPercentItem(value) {
 	const percentItem = document.createElement('div')
 	percentItem.classList.add('percent-block__item')
-	for(i = 0; i < value + 1; i++) {
+	for( let i = 0; i < value + 1; i++) {
 		percentItem.innerHTML += `<span>${i}%</span>`
 	}
 	return percentItem
@@ -180,24 +175,11 @@ if(percentItems) {
 	})
 }
 
-function updateData() {
-	const carPanelItems = document.querySelectorAll('.car-panel__item')
-	const currentData = JSON.parse(localStorage.getItem('carConfig'))
-	carPanelItems.forEach(item => {
-		let element = currentData.filter(el => el.part === item.dataset.panel)
-		item.querySelector('.progress-ring').style.strokeDashoffset = getOffset(element[0].percent)
-		item.querySelector('.percent').textContent = element[0].percent
-		item.querySelector('.percent-block__item').style.top = `-${percentToTop(element[0].percent)}px`		
-	})
-	totalValue()
-}
 
-const percentToTop = (value) => {
-	const percentBlockItem = document.querySelector('.percent-block__item')
-	let percentElementHight = percentBlockItem.scrollHeight / 101
-	let percentЕrek = percentElementHight * value
-	return percentЕrek
-}
+
+
+
+
 
 const resetBtn = document.getElementById('reset')
 resetBtn.addEventListener('click', () => resetAll())
@@ -211,6 +193,7 @@ const resetAll = () => {
 	})
 	localStorage.setItem('carConfig', JSON.stringify(data))
 	updateData()
+	showInfoMessage('data has been successfully reset', 'ok')
 }
 
 const hoverPart = () => {
@@ -285,6 +268,8 @@ function changePanelValue() {
 }
 
 
+
+
 const input = document.querySelector('.part-info__input');
 const buttonUp = document.querySelector('.up');
 const buttonDown = document.querySelector('.down');
@@ -292,7 +277,7 @@ const buttonDown = document.querySelector('.down');
 buttonUp.onclick = function() {
     let value = parseInt(input.value, 10);
     value = isNaN(value) ? 0 : value;
-	value++;
+	value += 10;
 	if (value < 101 && value > -1) {
 		
 		input.value = value;
@@ -313,7 +298,7 @@ buttonUp.onclick = function() {
 buttonDown.onclick = function() {
     let value = parseInt(input.value, 10);
     value = isNaN(value) ? 0 : value;
-	value--;
+	value -= 10
 	if (value < 101 && value > -1) {
 		input.value = value;
 		const localDate = JSON.parse(localStorage.getItem('carConfig'))
@@ -328,4 +313,4 @@ buttonDown.onclick = function() {
 		updateData()
 		checkPercentValue(input.dataset.input)
 	}
-};
+}
