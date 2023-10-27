@@ -99,7 +99,8 @@ const saveConfig = () => {
 							</li>
 						</ul>
 						<div class="config__buttons">
-						<button id="btn_${index}" class="config__button">
+						<a href="#" class="" data-btn="price" data-id="1">More</a>
+						<button id="btn_${index}" class="config__button" data-btn="remove" data-id="${index}">
 							<img src="images/dist/delete.svg" alt="delete">
 						</button>
 					</div>
@@ -124,7 +125,7 @@ const saveConfig = () => {
 				if (currentCarsConfig.length < 2) {
 					localStorage.removeItem('fullCarConfig')
 					parseSavedValue()
-					savedConfigItems.textContent = 'No saved config'
+					savedConfigItems.textContent = `No saved config`
 				}
 				showInfoMessage('successfully deleted', 'ok')
 			}

@@ -10,7 +10,7 @@
 
 	&__title {
 		color: #fff;
-		font-size: 25px;
+		font-size: 20px;
 		font-weight: 400;
 		margin: 0 10px 0 0;
 		text-transform: capitalize;
@@ -23,7 +23,7 @@
 
 	&__logo {
 		display: block;
-		max-width: 70px;
+		max-width: 50px;
 		img {
 			display: block;
 			width: 100%;
@@ -157,7 +157,7 @@
 			background-color: #2b2b2b;
 			transform: rotate(45deg);
 			&::before {
-				content: '';
+				content: "";
 				display: block;
 				width: 10px;
 				height: 2px;
@@ -199,9 +199,10 @@
 }
 
 .btn {
-	border: 2px solid #9e9e9e;
+	border: 1px solid #9e9e9e;
 	border-radius: 5px;
 	text-transform: capitalize;
+	color: #9e9e9e;
 	background-color: #fff;
 	padding: 7px 15px;
 	cursor: pointer;
@@ -216,6 +217,7 @@
 
 .car-panel {
 	padding: 20px 0;
+	user-select: none;
 	// .car-panel__row
 
 	&__row {
@@ -245,78 +247,6 @@
 			padding: 0 5px;
 			font-size: 14px;
 			font-weight: 500;
-		}
-	}
-
-	.car-panel {
-		// .car-panel__total-value
-
-		&__total-value {
-		}
-	}
-	.total-value {
-	
-
-		&__block {
-			display: flex;
-			justify-content: space-between;
-			flex-wrap: wrap;
-			margin-bottom: 20px;
-			gap: 5px;
-			align-items: center;
-			font-size: 12px;
-			line-height: 12px;
-		}
-
-		&__title {
-			text-align: center;
-			text-transform: capitalize;
-			margin-bottom: 5px;
-		}
-
-		// .total-value__min
-
-		&__min {
-		}
-
-		// .total-value__trek
-
-		&__trek {
-			position: relative;
-			flex: 1 1 100%;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			background-color: #9e9e9e;
-			min-height: 16px;
-			border-radius: 4px;
-			overflow: hidden;
-		}
-
-		&__progress {
-			display: block;
-			position: absolute;
-			left: 0;
-			top: 0;
-			bottom: 0;
-			width: 0;
-			background-color: #5fdd5a;
-			transition: width 1s ease-in-out;
-		}
-
-		// .total-value__curretnt-value
-
-		&__curretnt-value {
-			position: relative;
-			font-size: 12px;
-			color: #fff;
-			padding: 2px;
-			z-index: 10;
-		}
-
-		// .total-value__max
-
-		&__max {
 		}
 	}
 
@@ -369,6 +299,70 @@
 	// .car-panel__button
 
 	&__button {
+	}
+}
+
+.total-value {
+	&__block {
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		margin-bottom: 20px;
+		gap: 5px;
+		align-items: center;
+		font-size: 12px;
+		line-height: 12px;
+	}
+
+	&__title {
+		text-align: center;
+		text-transform: capitalize;
+		margin-bottom: 5px;
+	}
+
+	// .total-value__min
+
+	&__min {
+	}
+
+	// .total-value__trek
+
+	&__trek {
+		position: relative;
+		flex: 1 1 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: #9e9e9e;
+		min-height: 16px;
+		border-radius: 4px;
+		overflow: hidden;
+	}
+
+	&__progress {
+		display: block;
+		position: absolute;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		width: 0;
+		background-color: #5fdd5a;
+		transition: width 1s ease-in-out;
+	}
+
+	// .total-value__curretnt-value
+
+	&__curretnt-value {
+		position: relative;
+		font-size: 12px;
+		color: #fff;
+		padding: 2px;
+		z-index: 10;
+	}
+
+	// .total-value__max
+
+	&__max {
 	}
 }
 
@@ -435,8 +429,10 @@
 }
 
 .footer {
-	padding: 20px 0;
+	font-size: 14px;
+	padding: 15px 0;
 	background-color: #9e9e9e;
+
 	// .footer__row
 
 	&__row {
@@ -447,7 +443,6 @@
 	&__copyright {
 		color: #fff;
 		span {
-			//margin-right: 5px;
 		}
 		a {
 			color: inherit;
@@ -455,7 +450,7 @@
 			transition: color 0.2s ease-in;
 			@media (any-hover: hover) {
 				&:hover {
-					color: darken($color: #9e9e9e, $amount: 30);
+					color: darken(#9e9e9e, 30);
 				}
 			}
 		}
@@ -471,11 +466,11 @@
 	border: 1px solid #9e9e9e;
 	border-bottom-right-radius: 5px;
 	width: 150px;
-	min-height: 326px;
-	transition: left .25s ease-in;
+	transition: left 0.25s ease-in;
+	z-index: 10;
 
 	&.show {
-		transition: left .25s ease-in;
+		transition: left 0.25s ease-in;
 		left: 0;
 	}
 	// .saved-config__body
@@ -492,6 +487,10 @@
 	// .saved-config__items
 
 	&__items {
+		min-height: 263px;
+		text-align: center;
+		font-size: 14px;
+		color: #eceaea;
 		& > * {
 			&:not(:last-child) {
 				margin-bottom: 10px;
@@ -502,6 +501,7 @@
 	// .saved-config__item
 
 	&__item {
+		text-align: start;
 	}
 
 	// .saved-config__button
@@ -509,20 +509,22 @@
 	&__button {
 		position: absolute;
 		top: -1px;
-		right: -40px;
-		writing-mode: vertical-rl; 
-		text-orientation: upright; 
+		right: -39px;
+		writing-mode: vertical-rl;
+		text-orientation: upright;
 		background-color: #9e9e9e;
 		color: #fff;
+		min-height: 284px;
 		border-top-right-radius: 10px;
-		padding: 15px 10px 10px;
-		white-space:nowrap;
-		min-width: 20px;
+		border-bottom-right-radius: 10px;
+		font-size: 14px;
+		white-space: nowrap;
 		text-transform: capitalize;
-		letter-spacing: 0.01px;
+		overflow: hidden;
 		cursor: pointer;
-		transition: color .25s ease-in, background-color .25s ease-in;
-		@media(any-hover: hover) {
+		user-select: none;
+		transition: color 0.25s ease-in, background-color 0.25s ease-in;
+		@media (any-hover: hover) {
 			&:hover {
 				color: #5fdd5a;
 			}
@@ -535,16 +537,17 @@
 		}
 	}
 
+	&__button-title {
+		display: inline-block;
+		padding: 10px 12px 0;
+	}
+
 	&__sum {
-		position: absolute;
-		right: 0px;
-		bottom: -39px; 
+		display: inline-block;
 		color: #fff;
-		background-color: #5fdd5a;		
-		padding: 10px;
-		min-width: 20px;
-		border-bottom-right-radius: 10px;
-		transition: background-color .25s ease-in;
+		background-color: #5fdd5a;
+		padding: 10px 12px;
+		transition: background-color 0.25s ease-in;
 	}
 	&.show {
 		.saved-config__sum {
@@ -554,13 +557,11 @@
 }
 
 .config {
-	cursor: pointer;
-	
 	fieldset {
 		border: 1px solid #e0e0e0;
 		padding: 0;
 		border-radius: 5px;
-		transition: border .25s ease-in;
+		transition: border 0.25s ease-in;
 	}
 
 	// .config__title
@@ -569,10 +570,10 @@
 		font-size: 14px;
 		letter-spacing: 1px;
 		padding: 0 10px;
-		transition: color .25s ease-in;
+		transition: color 0.25s ease-in;
 	}
 
-	@media(any-hover) {
+	@media (any-hover) {
 		&:hover {
 			fieldset {
 				border-color: #5fdd5a;
@@ -606,7 +607,6 @@
 
 	&__part {
 		margin-right: 5px;
-		
 	}
 
 	// .config__value
@@ -630,13 +630,14 @@
 		background-color: transparent;
 		border-radius: 2px;
 		width: 20px;
-		cursor: pointer;
 		padding: 3px;
-		transition: background-color .25s ease-in;
+		cursor: pointer;
+		user-select: none;
+		transition: background-color 0.25s ease-in;
 		&:not(:last-child) {
 			margin-right: 5px;
 		}
-		@media(any-hover) {
+		@media (any-hover) {
 			&:hover {
 				background-color: #707070;
 			}
@@ -648,16 +649,11 @@
 	}
 }
 .car-panel {
-
 	// .car-panel__title
 
 	&__title {
 	}
 }
-
-
-
-
 
 .info-messages {
 	position: absolute;
@@ -667,10 +663,11 @@
 	z-index: -10;
 	visibility: hidden;
 	pointer-events: none;
-	padding: 5px;	
+	padding: 5px;
 	overflow: hidden;
-	background-color: #fff;
+	background-color: #f1f1f1;
 	border-radius: 5px;
+	user-select: none;
 	&__block {
 		border: 1px solid #9e9e9e;
 		text-transform: capitalize;
@@ -695,42 +692,39 @@
 	// .info-messages__body
 
 	&__body {
-		background-color: #fff;
 		padding: 5px;
 		color: #707070;
 		min-height: 20px;
 		border-radius: 5px;
 	}
 
-		// .info-messages__message
+	// .info-messages__message
 
-		&__message {
-			margin-bottom: 10px;
-			text-transform: capitalize;
-		}
-	
-		// .info-messages__img
-	
-		&__img {
-			margin-bottom: 15px;
-		}
-	
-		// .info-messages__img-container
-	
-		&__img-container {
-			position: relative;
-			width: 30px;
-			height: 30px;
-			margin: 0 auto;
+	&__message {
+		margin-bottom: 10px;
+		text-transform: capitalize;
+	}
 
-			img {
-				width: 100%;
-				height: 100%;
-			}
+	// .info-messages__img
+
+	&__img {
+		margin-bottom: 15px;
+	}
+
+	// .info-messages__img-container
+
+	&__img-container {
+		position: relative;
+		width: 30px;
+		height: 30px;
+		margin: 0 auto;
+
+		img {
+			width: 100%;
+			height: 100%;
 		}
+	}
 }
-
-
 
 .container {
 	position: relative;
@@ -754,7 +748,7 @@ input {
 }
 
 input:hover {
-	border-color: green;
+	border-color: #5fdd5a;
 }
 
 .spinner {
@@ -804,4 +798,6 @@ input:hover {
 	transform: rotate(-90deg);
 	top: -2rem;
 }
+
+
 
